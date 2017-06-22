@@ -1,6 +1,10 @@
 [
   {
-    "front": "Who is the founder of Hufflepuff House?",
+    "front": "Who was the founder of Hufflepuff House?",
     "back": "helga hufflepuff"
+  },
+  {
+    "front": "What is Hufflepuff House's Heraldic Beast?",
+    "back": "badger"
   }
 ]

@@ -5,7 +5,7 @@ var inquirer = require("inquirer");
 // Requiring fs to write to JSON file
 var fs = require("fs");
 // Requiring ./basicCard.js that has our basic card constructor exported
-// var BasicCard = require("./basicCard.js");
+var BasicCard = require("./basicCard.js");
 
 var cardArray = [];
 
@@ -66,30 +66,45 @@ function createNewCard(){
 };
 
 // This function reads the flash cards saved by the user
-function studyCards(){
+var i = 0;
+
+var studyArray = [];
+
+var studyCards = function(){
   fs.readFile("newCards.JSON", "utf8", function(error, data){
     if (error){
       console.log("There is an error fetching your flashcards")
     }
-  // Convert the data back into an object
-  var questions = JSON.parse(data);
+    // Convert the data back into an object
+    var questions = JSON.parse(data);
+
+    studyArray.push(questions);
     // console.log(questions);
-    inquirer.prompt([
-      {
-        type:"input",
-        message: questions[0].front,
-        name:"question"
-      }
-    ]).then(function(answer){
-      if (answer.question == questions[0].back){
-        console.log("Correct!");
-        studyCards();
-      }
-      else{
-        console.log("Incorrect! The correct answer was" + questions[0].back)
-        studyCards();
-      }
-    });
+    // for (var i = 0; i < questions.length; i++){
+    if (i < studyArray.length){
+      inquirer.prompt([
+        {
+          type:"input",
+          message: questions[i].front,
+          name:"question"
+        }
+      ]).then(function(answer){
+        if (answer.question == questions[i].back){
+          console.log("Correct!");
+          studyCards();
+        }
+        else{
+          console.log("Incorrect! The correct answer was " + questions[0].back);
+          studyCards();
+        }
+        i++;
+
+        // studyCards();
+      });
+    }
+    // else (i == studyArray.length){
+    //   initialPrompt();
+    // }
   });
 }
 
