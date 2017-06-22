@@ -1,0 +1,22 @@
+{
+  "name": "flashcard_generator",
+  "version": "1.0.0",
+  "description": "A command line application that allows you to test your knowledge of the Harry Potter House of Hufflepuff.",
+  "main": "play.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NJedic/Flashcard-Generator.git"
+  },
+  "author": "NJedic",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NJedic/Flashcard-Generator/issues"
+  },
+  "homepage": "https://github.com/NJedic/Flashcard-Generator#readme",
+  "dependencies": {
+    "inquirer": "^3.1.1"
+  }
+}
