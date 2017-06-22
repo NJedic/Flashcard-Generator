@@ -1,4 +1,4 @@
-//REQUIREMENTS
+//REQUIREMENTS & GLOBAL VARIABLES
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Requiring Inquirer
 var inquirer = require("inquirer");
@@ -7,7 +7,12 @@ var fs = require("fs");
 // Requiring ./basicCard.js that has our basic card constructor exported
 var BasicCard = require("./basicCard.js");
 
+// Setting an empty array variable to hold the flash cards created by the user
 var cardArray = [];
+// Setting a variable to represent the index number of the questions in the array
+var i = 0;
+// Setting an empty array variable to hold the flashcards pulled from the "newCards.JSON" file
+var studyArray = [];
 
 //FUNCTIONS
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -54,11 +59,11 @@ function createNewCard(){
       }
     ]).then(function(directory){
       // If they do, the createNewCard function runs again
-      if (directory.nextStep == "Yes"){
+      if (directory.nextStep === "Yes"){
         createNewCard();
       }
       // If not, the initialPrompt function runs again and they are directed back to the main screen
-      else if (directory.nextStep == "No"){
+      else if (directory.nextStep === "No"){
         initialPrompt();
       }
     });
@@ -66,51 +71,63 @@ function createNewCard(){
 };
 
 // This function reads the flash cards saved by the user
-var i = 0;
-
-var studyArray = [];
-
 var studyCards = function(){
+  // Read the newCards.JSON file that contains our flashcards
   fs.readFile("newCards.JSON", "utf8", function(error, data){
     if (error){
       console.log("There is an error fetching your flashcards")
     }
     // Convert the data back into an object
-    var questions = JSON.parse(data);
-
-    studyArray.push(questions);
-    // console.log(questions);
-    // for (var i = 0; i < questions.length; i++){
-    if (i < studyArray.length){
-      inquirer.prompt([
-        {
-          type:"input",
-          message: questions[i].front,
-          name:"question"
-        }
-      ]).then(function(answer){
-        if (answer.question == questions[i].back){
-          console.log("Correct!");
-          studyCards();
-        }
-        else{
-          console.log("Incorrect! The correct answer was " + questions[0].back);
-          studyCards();
-        }
-        i++;
-
-        // studyCards();
-      });
+    var questions = JSON.parse(data);  
+      // console.log(questions);
+    // Loop through our object and Push that object into our empty array
+    for(var index = 0; index < questions.length; index++){
+      studyArray.push(questions[index]);
     }
-    // else (i == studyArray.length){
-    //   initialPrompt();
-    // }
+    // Calling our function that displays the flashcards
+    displayCards();
+    
   });
 }
 
+function displayCards (){
+  // If i is less than the length of studyArray...
+  if (i < studyArray.length){
+      // ....Ask the next question up
+      inquirer.prompt([
+        {
+          "type":"input",
+          "message": studyArray[i].front,
+          "name":"question"
+        }
+      // .then Handles the Answer
+      ]).then(function(answer){
+        // If the user answer matches the flashcard answer..  
+        var answerConverted = answer.question.toLowerCase();
+        if (answerConverted === studyArray[i].back){
+          console.log("Correct!");        }
+        // Else..
+        else{
+          console.log("Incorrect! The correct answer was " + studyArray[i].back);
+        }
+        // Add 1 to i to call the next question when the displayCards function runs again
+        i++;
+        // Call the displayCards function
+        displayCards();
+        // studyCards();
+      });
+    }
+    // If i is = or > the length of studyArray...
+    else{
+      console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+      console.log("That is the end of your deck. Choose 'Create a Card' to create a new deck to study!");
+      console.log("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+      // Call the initialPrompt function and go back to the home screen
+      initialPrompt();
+    }
+}
 
-
-
+// Function that handles the initial user direction/ Acts as the app "home page"
 function initialPrompt(){
   inquirer.prompt([
 
