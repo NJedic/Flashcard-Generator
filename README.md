@@ -17,3 +17,5 @@ Use this super awesome CLI app to build and retrieve flash cards for studying pu
 ***
 
 **PRO TIP:** If you want to learn more about Harry Potter's Hufflepuff House, build a deck using the suggested questions in the cardOptions.js file - you're bound to gain some knowledge!
+
+![Hufflepuffs Cheering](https://media.giphy.com/media/9YvRWVuNZP5As/giphy.gif)
